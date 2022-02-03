@@ -1,54 +1,73 @@
-// All things array based
+// All things array based and display board in DOM
 
-const gameBoard = (() => {
-    const _Gameboard = {
-        gameboard : ['', '', '', '', '', '', '', '', '']
-    }
+const Gameboard = (() => {
 
-    
+    let gameBoardArray = ['', '', '','', '', '','', '', ''];
     const _boardContainer = document.querySelector('.board-container');
 
-    function createBoard() {
-        let array = _Gameboard["gameboard"];
-        array.forEach((element, index) => {
-            let div = document.createElement('div');
-            div.classList.add('square');
-            div.textContent = element;
-            _boardContainer.appendChild(div);
-            div.dataset.square = index;
-        });
-    }
-
-    //How to add to specific index of the array
-    function addToGameboard(index, marker){
-        let array = _Gameboard["gameboard"];
-        array.splice(index, 1, marker);
-        createBoard();
-    }
+    gameBoardArray.forEach((element, index) => {
+        let div = document.createElement('div');
+        div.classList.add('square');
+        _boardContainer.appendChild(div);
+        div.dataset.square = index;
+    });
 
     const squares = document.querySelectorAll('.square');
 
-    // squares.forEach((square) => {
-    //     square.addEventListener('click', addToGameboard(square.dataset, 'x'));
-    // });
+    squares.forEach(function(square) {
+        square.addEventListener('click', handleSquare)
+    })
 
-    function addToBoard(event) {
-        event.textContent = "XX";
+    //How to add to specific index of the array - clear board & regen with additional marker
+    function addToGameboardArray(index, marker){
+        gameBoardArray.splice(index, 1, marker);
+        console.log(gameBoardArray);
     }
 
-        squares.forEach((square) => {
-        square.addEventListener('click', addToBoard(square));
-    });
+    //How to resetGameboardArray for end of game
+    function resetGameboardArray(){
+        gameBoardArray = new Array(9).fill("");
+    }
 
-    return { createBoard, addToGameboard };
+    //Return gameBoardArray COPY for use in other modules
+
+    function getGameboardArray(){
+        //should return copy of the board
+        let gameBoardArrayCopy = gameBoardArray;
+        return gameBoardArrayCopy;
+    }
+
+    function handleSquare(event){
+        console.log(event.target.dataset.square);
+        addToGameboardArray(event.target.dataset.square, player1.getMarker());
+        let newArray = getGameboardArray();
+      //  squares.remove();
+        updateDOM(event);
+     }
+
+    function updateDOM(event){
+        event.target.textContent = player1.getMarker();
+    }
+
+    /*onclick for squares should activate
+    1.addtogameboard
+    2.getgameboardarray
+    3.createboardinDOM
+    */
+
+    return { addToGameboardArray, resetGameboardArray, getGameboardArray, handleSquare };
 })();
 
-//All things DOM based
+//Flow of the game
 const displayController = (() => {
+    
+    function flow() {
+
+    }
 
 
-
-
+    
+    return { }
 
 })();
 
@@ -63,7 +82,7 @@ const Player = (name, marker) => {
 const player1 = Player('jj', 'X');
 const player2 = Player('comp', 'O');
 
-//displayController.createBoard();
-//gameBoard.createBoard();
-//gameBoard.addToGameboard(1, 'X');
-gameBoard.createBoard();
+
+//Gameboard.addToGameboardArray(1, player1.getMarker());
+//Gameboard.resetGameboardArray();
+Gameboard.getGameboardArray();
